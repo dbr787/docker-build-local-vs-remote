@@ -1,33 +1,27 @@
 steps:
   - label: ":docker: Local Build (Small)"
     key: "local-build-small"
-    command: docker build -t docker-benchmark:local-small .
+    command: docker buildx build --builder docker -t docker-benchmark:local-small .
     agents:
       queue: "linux-small"
     env:
       BUILDKIT_PROGRESS: "plain"
-      DOCKER_CONTEXT: "default"
-      BUILDKIT_HOST: ""
 
   - label: ":docker: Local Build (Medium)"
     key: "local-build-medium"
-    command: docker build -t docker-benchmark:local-medium .
+    command: docker buildx build --builder docker -t docker-benchmark:local-medium .
     agents:
       queue: "linux-medium"
     env:
       BUILDKIT_PROGRESS: "plain"
-      DOCKER_CONTEXT: "default"
-      BUILDKIT_HOST: ""
 
   - label: ":docker: Local Build (Large)"
     key: "local-build-large"
-    command: docker build -t docker-benchmark:local-large .
+    command: docker buildx build --builder docker -t docker-benchmark:local-large .
     agents:
       queue: "linux-large"
     env:
       BUILDKIT_PROGRESS: "plain"
-      DOCKER_CONTEXT: "default"
-      BUILDKIT_HOST: ""
 
   - label: ":cloud: Remote Build (Small)"
     key: "remote-build-small"
