@@ -1,0 +1,20 @@
+steps:
+  - label: ":docker: Local Build"
+    key: "local-build"
+    command: |
+      echo "⏱️  Starting LOCAL Docker build at $$(date)"
+      time docker build -t docker-benchmark:local .
+    env:
+      DOCKER_BUILDKIT: "1"
+      BUILDKIT_PROGRESS: "plain"
+      DOCKER_CONTEXT: "default"
+      BUILDKIT_HOST: ""
+
+  - label: ":cloud: Remote Build"
+    key: "remote-build"
+    command: |
+      echo "⏱️  Starting REMOTE Docker build at $$(date)"
+      time docker build -t docker-benchmark:remote .
+    env:
+      DOCKER_BUILDKIT: "1"
+      BUILDKIT_PROGRESS: "plain"
