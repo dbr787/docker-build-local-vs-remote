@@ -1,54 +1,50 @@
 steps:
-  - label: ":docker: Local Build (Small)"
-    key: "local-build-small"
-    command: |
-      docker context ls
-      docker buildx ls
-      docker buildx build --builder default -t docker-benchmark:local-small .
-    agents:
-      queue: "linux-small"
+  - group: ":cloud: Remote Builds"
+    steps:
+      - label: "Large Agent"
+        key: "remote-build-large"
+        command: docker buildx build --progress=plain -t docker-benchmark:remote-large .
+        agents:
+          queue: "linux-large"
 
-  - label: ":docker: Local Build (Medium)"
-    key: "local-build-medium"
-    command: |
-      docker context ls
-      docker buildx ls
-      docker buildx build --builder default -t docker-benchmark:local-medium .
-    agents:
-      queue: "linux-medium"
+      - wait
 
-  - label: ":docker: Local Build (Large)"
-    key: "local-build-large"
-    command: |
-      docker context ls
-      docker buildx ls
-      docker buildx build --builder default -t docker-benchmark:local-large .
-    agents:
-      queue: "linux-large"
+      - label: "Medium Agent"
+        key: "remote-build-medium"
+        command: docker buildx build --progress=plain -t docker-benchmark:remote-medium .
+        agents:
+          queue: "linux-medium"
 
-  - label: ":cloud: Remote Build (Small)"
-    key: "remote-build-small"
-    command: |
-      docker context ls
-      docker buildx ls
-      docker buildx build -t docker-benchmark:remote-small .
-    agents:
-      queue: "linux-small"
+      - wait
 
-  - label: ":cloud: Remote Build (Medium)"
-    key: "remote-build-medium"
-    command: |
-      docker context ls
-      docker buildx ls
-      docker buildx build -t docker-benchmark:remote-medium .
-    agents:
-      queue: "linux-medium"
+      - label: "Small Agent"
+        key: "remote-build-small"
+        command: docker buildx build --progress=plain -t docker-benchmark:remote-small .
+        agents:
+          queue: "linux-small"
 
-  - label: ":cloud: Remote Build (Large)"
-    key: "remote-build-large"
-    command: |
-      docker context ls
-      docker buildx ls
-      docker buildx build -t docker-benchmark:remote-large .
-    agents:
-      queue: "linux-large"
+  - wait
+
+  - group: ":docker: Local Builds"
+    steps:
+      - label: "Large Agent"
+        key: "local-build-large"
+        command: docker buildx build --builder default --progress=plain -t docker-benchmark:local-large .
+        agents:
+          queue: "linux-large"
+
+      - wait
+
+      - label: "Medium Agent"
+        key: "local-build-medium"
+        command: docker buildx build --builder default --progress=plain -t docker-benchmark:local-medium .
+        agents:
+          queue: "linux-medium"
+
+      - wait
+
+      - label: "Small Agent"
+        key: "local-build-small"
+        command: docker buildx build --builder default --progress=plain -t docker-benchmark:local-small .
+        agents:
+          queue: "linux-small"
