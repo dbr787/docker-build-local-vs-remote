@@ -1,78 +1,51 @@
 # Large Docker image for benchmarking build performance
 FROM ubuntu:22.04
 
-# Install base packages and create large layers
+# Install basic packages first
 RUN apt-get update && apt-get install -y \
-    build-essential \
     curl \
     wget \
     git \
     python3 \
     python3-pip \
-    nodejs \
-    npm \
-    openjdk-11-jdk \
-    maven \
-    gradle \
-    golang-go \
-    ruby \
-    php \
-    composer \
+    vim \
+    htop \
     && rm -rf /var/lib/apt/lists/*
 
-# Install large Python packages
+# Install some Python packages (but not the huge ones)
 RUN pip3 install \
-    tensorflow \
-    pytorch \
-    numpy \
-    pandas \
-    scikit-learn \
-    matplotlib \
-    seaborn \
-    jupyter \
+    requests \
     flask \
-    django
+    numpy \
+    pandas
 
-# Install Node.js packages globally
+# Create large files across multiple layers
+RUN dd if=/dev/zero of=/tmp/largefile1 bs=1M count=150
+RUN dd if=/dev/zero of=/tmp/largefile2 bs=1M count=150
+RUN dd if=/dev/zero of=/tmp/largefile3 bs=1M count=150
+
+# Install Node.js from NodeSource (more reliable)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install some global npm packages
 RUN npm install -g \
     typescript \
-    webpack \
-    babel-cli \
     eslint \
-    prettier \
-    react-scripts \
-    next \
-    express \
-    lodash
+    prettier
 
-# Create a large file to increase image size
-RUN dd if=/dev/zero of=/tmp/largefile bs=1M count=500
+# Create more layers with file operations
+RUN for i in {1..100}; do mkdir -p /tmp/layer$i && echo "Large content layer $i" > /tmp/layer$i/file.txt; done
 
-# Download and compile a large source code project
-WORKDIR /tmp
-RUN git clone https://github.com/torvalds/linux.git --depth 1 linux-source
-
-# Install additional development tools
-RUN apt-get update && apt-get install -y \
-    clang \
-    llvm \
-    cmake \
-    ninja-build \
-    gdb \
-    valgrind \
-    strace \
-    htop \
-    vim \
-    emacs \
-    && rm -rf /var/lib/apt/lists/*
-
-# Create multiple large layers with different content
+# Create application directories and files
 COPY . /app
 WORKDIR /app
 
-# Final layer with runtime setup
-RUN echo "Docker build performance test image" > /app/README.txt && \
-    mkdir -p /app/logs /app/data /app/cache
+# Create final large files and directories
+RUN mkdir -p /app/logs /app/data /app/cache /app/temp
+RUN dd if=/dev/zero of=/app/data/benchmark.dat bs=1M count=200
+RUN echo "Docker build performance test image - $(date)" > /app/README.txt
 
 EXPOSE 8080 3000 5000
 CMD ["echo", "Docker build performance test completed"]

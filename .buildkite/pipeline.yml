@@ -1,20 +1,54 @@
 steps:
-  - label: ":docker: Local Build"
-    key: "local-build"
-    command: |
-      echo "⏱️  Starting LOCAL Docker build at $$(date)"
-      time docker build -t docker-benchmark:local .
+  - label: ":docker: Local Build (Small)"
+    key: "local-build-small"
+    command: docker build -t docker-benchmark:local-small .
+    agents:
+      queue: "linux-small"
     env:
-      DOCKER_BUILDKIT: "1"
       BUILDKIT_PROGRESS: "plain"
       DOCKER_CONTEXT: "default"
       BUILDKIT_HOST: ""
 
-  - label: ":cloud: Remote Build"
-    key: "remote-build"
-    command: |
-      echo "⏱️  Starting REMOTE Docker build at $$(date)"
-      time docker build -t docker-benchmark:remote .
+  - label: ":docker: Local Build (Medium)"
+    key: "local-build-medium"
+    command: docker build -t docker-benchmark:local-medium .
+    agents:
+      queue: "linux-medium"
     env:
-      DOCKER_BUILDKIT: "1"
+      BUILDKIT_PROGRESS: "plain"
+      DOCKER_CONTEXT: "default"
+      BUILDKIT_HOST: ""
+
+  - label: ":docker: Local Build (Large)"
+    key: "local-build-large"
+    command: docker build -t docker-benchmark:local-large .
+    agents:
+      queue: "linux-large"
+    env:
+      BUILDKIT_PROGRESS: "plain"
+      DOCKER_CONTEXT: "default"
+      BUILDKIT_HOST: ""
+
+  - label: ":cloud: Remote Build (Small)"
+    key: "remote-build-small"
+    command: docker build -t docker-benchmark:remote-small .
+    agents:
+      queue: "linux-small"
+    env:
+      BUILDKIT_PROGRESS: "plain"
+
+  - label: ":cloud: Remote Build (Medium)"
+    key: "remote-build-medium"
+    command: docker build -t docker-benchmark:remote-medium .
+    agents:
+      queue: "linux-medium"
+    env:
+      BUILDKIT_PROGRESS: "plain"
+
+  - label: ":cloud: Remote Build (Large)"
+    key: "remote-build-large"
+    command: docker build -t docker-benchmark:remote-large .
+    agents:
+      queue: "linux-large"
+    env:
       BUILDKIT_PROGRESS: "plain"
