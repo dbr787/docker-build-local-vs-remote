@@ -1,48 +1,87 @@
 steps:
   - label: ":docker: Local Build (Small)"
     key: "local-build-small"
-    command: docker buildx build --builder docker -t docker-benchmark:local-small .
+    command: |
+      echo "=== Docker Configuration ==="
+      docker context ls
+      docker buildx ls
+      echo "DOCKER_HOST: $$DOCKER_HOST"
+      echo "DOCKER_CONTEXT: $$DOCKER_CONTEXT"
+      echo "=== Starting Build ==="
+      docker build -t docker-benchmark:local-small .
     agents:
       queue: "linux-small"
     env:
-      BUILDKIT_PROGRESS: "plain"
+      DOCKER_HOST: "unix:///var/run/docker.sock"
+      DOCKER_CONTEXT: ""
 
   - label: ":docker: Local Build (Medium)"
     key: "local-build-medium"
-    command: docker buildx build --builder docker -t docker-benchmark:local-medium .
+    command: |
+      echo "=== Docker Configuration ==="
+      docker context ls
+      docker buildx ls
+      echo "DOCKER_HOST: $$DOCKER_HOST"
+      echo "DOCKER_CONTEXT: $$DOCKER_CONTEXT"
+      echo "=== Starting Build ==="
+      docker build -t docker-benchmark:local-medium .
     agents:
       queue: "linux-medium"
     env:
-      BUILDKIT_PROGRESS: "plain"
+      DOCKER_HOST: "unix:///var/run/docker.sock"
+      DOCKER_CONTEXT: ""
 
   - label: ":docker: Local Build (Large)"
     key: "local-build-large"
-    command: docker buildx build --builder docker -t docker-benchmark:local-large .
+    command: |
+      echo "=== Docker Configuration ==="
+      docker context ls
+      docker buildx ls
+      echo "DOCKER_HOST: $$DOCKER_HOST"
+      echo "DOCKER_CONTEXT: $$DOCKER_CONTEXT"
+      echo "=== Starting Build ==="
+      docker build -t docker-benchmark:local-large .
     agents:
       queue: "linux-large"
     env:
-      BUILDKIT_PROGRESS: "plain"
+      DOCKER_HOST: "unix:///var/run/docker.sock"
+      DOCKER_CONTEXT: ""
 
   - label: ":cloud: Remote Build (Small)"
     key: "remote-build-small"
-    command: docker build -t docker-benchmark:remote-small .
+    command: |
+      echo "=== Docker Configuration ==="
+      docker context ls
+      docker buildx ls
+      echo "DOCKER_HOST: $$DOCKER_HOST"
+      echo "DOCKER_CONTEXT: $$DOCKER_CONTEXT"
+      echo "=== Starting Build ==="
+      docker buildx build -t docker-benchmark:remote-small .
     agents:
       queue: "linux-small"
-    env:
-      BUILDKIT_PROGRESS: "plain"
 
   - label: ":cloud: Remote Build (Medium)"
     key: "remote-build-medium"
-    command: docker build -t docker-benchmark:remote-medium .
+    command: |
+      echo "=== Docker Configuration ==="
+      docker context ls
+      docker buildx ls
+      echo "DOCKER_HOST: $$DOCKER_HOST"
+      echo "DOCKER_CONTEXT: $$DOCKER_CONTEXT"
+      echo "=== Starting Build ==="
+      docker buildx build -t docker-benchmark:remote-medium .
     agents:
       queue: "linux-medium"
-    env:
-      BUILDKIT_PROGRESS: "plain"
 
   - label: ":cloud: Remote Build (Large)"
     key: "remote-build-large"
-    command: docker build -t docker-benchmark:remote-large .
+    command: |
+      echo "=== Docker Configuration ==="
+      docker context ls
+      docker buildx ls
+      echo "DOCKER_HOST: $$DOCKER_HOST"
+      echo "DOCKER_CONTEXT: $$DOCKER_CONTEXT"
+      echo "=== Starting Build ==="
+      docker buildx build -t docker-benchmark:remote-large .
     agents:
       queue: "linux-large"
-    env:
-      BUILDKIT_PROGRESS: "plain"
