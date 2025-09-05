@@ -29,7 +29,7 @@ steps:
     steps:
       - label: "Large Agent"
         key: "local-build-large"
-        command: docker buildx build --builder default --progress=plain -t docker-benchmark:local-large .
+        command: docker buildx build --builder default --progress=plain --load -t docker-benchmark:local-large .
         agents:
           queue: "linux-large"
 
@@ -37,7 +37,7 @@ steps:
 
       - label: "Medium Agent"
         key: "local-build-medium"
-        command: docker buildx build --builder default --progress=plain -t docker-benchmark:local-medium .
+        command: docker buildx build --builder default --progress=plain --load -t docker-benchmark:local-medium .
         agents:
           queue: "linux-medium"
 
@@ -45,6 +45,6 @@ steps:
 
       - label: "Small Agent"
         key: "local-build-small"
-        command: docker buildx build --builder default --progress=plain -t docker-benchmark:local-small .
+        command: docker buildx build --builder default --progress=plain --load -t docker-benchmark:local-small .
         agents:
           queue: "linux-small"

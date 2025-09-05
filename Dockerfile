@@ -18,13 +18,15 @@ RUN dd if=/dev/zero of=/tmp/largefile2 bs=1M count=50
 # Create some directories
 RUN for i in {1..25}; do mkdir -p /tmp/layer$i && echo "Content layer $i" > /tmp/layer$i/file.txt; done
 
-# Create application directories and files
+# Create files that don't change often (better for caching)
+RUN mkdir -p /app/logs /app/data /app/cache
+RUN dd if=/dev/zero of=/app/data/benchmark.dat bs=1M count=50
+
+# Copy files last to avoid cache invalidation
 COPY . /app
 WORKDIR /app
 
-# Create final files
-RUN mkdir -p /app/logs /app/data /app/cache
-RUN dd if=/dev/zero of=/app/data/benchmark.dat bs=1M count=50
+# Dynamic content last
 RUN echo "Docker build performance test image - $(date)" > /app/README.txt
 
 EXPOSE 8080
