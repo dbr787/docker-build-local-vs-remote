@@ -1,0 +1,9 @@
+name: "Docker Build Local vs Remote Benchmark"
+description: "Benchmark Docker build performance between local and remote builders"
+steps:
+  - label: ":pipeline: Upload Pipeline"
+    command: "buildkite-agent pipeline upload"
+    agents:
+      queue: "default"
+env:
+  BUILDKITE_PIPELINE_DEFAULT_BRANCH: "main"
